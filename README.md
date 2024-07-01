@@ -158,64 +158,115 @@ dimensions.columns=['C1','C2','C3','C4','C5','C6']
 - Data Transformation: We transformed the data to the 6 principal components, creating a new DataFrame for these reduced dimensions.
 
 
+# ------------------------------------------------------------------------------
 
 
+# Clusterings
+
+Clustering is a method in data analysis where similar items are grouped together into clusters. It helps find natural groupings or patterns in data without needing predefined labels. This technique is useful for organizing data, identifying similarities, and exploring underlying structures in datasets.
+
+````
+km_4 = KMeans( n_clusters = 4, random_state = 123).fit( dimensions )
+km_5 = KMeans( n_clusters = 5, random_state = 123).fit( dimensions )
+km_6 = KMeans( n_clusters = 6, random_state = 123).fit( dimensions )
+km_7 = KMeans( n_clusters = 7, random_state = 123).fit( dimensions )
+km_8 = KMeans( n_clusters = 8, random_state = 123).fit( dimensions )
+km_9 = KMeans( n_clusters = 9, random_state = 123).fit( dimensions )
+km_10 = KMeans( n_clusters = 10, random_state = 123).fit( dimensions )
+````
+- Initialized and fit KMeans clustering models with different numbers of clusters (from 3 to 10) on the reduced dimensions (dimensions DataFrame).
+
+````
+DA_copy_scaled['cluster_3'] = km_3.labels_
+DA_copy_scaled['cluster_4'] = km_4.labels_
+DA_copy_scaled['cluster_5'] = km_5.labels_
+DA_copy_scaled['cluster_6'] = km_6.labels_
+DA_copy_scaled['cluster_7'] = km_7.labels_
+DA_copy_scaled['cluster_8'] = km_8.labels_
+DA_copy_scaled['cluster_9'] = km_9.labels_
+DA_copy_scaled['cluster_10'] = km_10.labels_
+````
+- Saved cluster labels for all models (from 3 to 10 clusters) and appended them to the DA_copy_scaled DataFrame for further analysis.
 
 
+# ------------------------------------------------------------------------------
 
 
+# Quantitative evaluation of number of clusters
+
+## 1. Analysis of the cluster size | Count method
 
 
+````
+pd.Series(km_3.labels_).value_counts()
+pd.Series(km_3.labels_).value_counts()/sum(pd.Series(km_3.labels_).value_counts())
+pd.Series(km_4.labels_).value_counts()/sum(pd.Series(km_4.labels_).value_counts())
+pd.Series(km_5.labels_).value_counts()/sum(pd.Series(km_5.labels_).value_counts())
+pd.Series(km_6.labels_).value_counts()/sum(pd.Series(km_6.labels_).value_counts())
+pd.Series(km_7.labels_).value_counts()/sum(pd.Series(km_7.labels_).value_counts())
+pd.Series(km_8.labels_).value_counts()/sum(pd.Series(km_8.labels_).value_counts())
+pd.Series(km_9.labels_).value_counts()/sum(pd.Series(km_9.labels_).value_counts())
+pd.Series(km_10.labels_).value_counts()/sum(pd.Series(km_10.labels_).value_counts())
+````
+- Each line calculates the number of data points assigned to each cluster by km, where km is one of the KMeans models.
+- Dividing by the total count provides the percentage distribution of data points across clusters.
+
+````
+km_4.inertia_
+km_5.inertia_
+km_6.inertia_
+````
+- Computes the sum of squared distances of samples to their closest cluster center.
+- Lower inertia values indicate tighter clusters, suggesting better-defined and more distinct clusters in the data.
 
 
+## 2. Elbow Analysis
 
 
+````
+for num_clusters in cluster_range:
+    clusters = KMeans( num_clusters ).fit( dimensions )
+    cluster_errors.append( clusters.inertia_ )
+clusters_df = pd.DataFrame( { "num_clusters": cluster_range, "cluster_errors": cluster_errors } )
+clusters_df.head(5)
+````
 
+- Automating the process of finding the optimal number of clusters for KMeans clustering using the elbow method. It calculates and plots the inertia values for different numbers of clusters, enabling data-driven decision-making on the appropriate K value for clustering the dimensions data.
 
+````
+%matplotlib inline
+import matplotlib.pyplot as plt
+plt.figure(figsize=(12,6))
+plt.plot( clusters_df.num_clusters, clusters_df.cluster_errors, marker = "o" )
+plt.show()
+````
+![image](https://github.com/Ras-codes/Customer-Credit-Card-Usage-Segmentation-Analysis/assets/164164852/7108d2f1-6c17-47cd-9665-4a08e7882382)
 
+## 3. Choosing number clusters using Silhouette Coefficient -- SC
 
+````
+metrics.silhouette_score( dimensions, km_4.labels_ )
+k_range = range(3, 18)
+scores = []
+for k in k_range:
+    km = KMeans(n_clusters = k, random_state = 123)
+    km.fit( dimensions )
+    scores.append( metrics.silhouette_score(dimensions, km.labels_) )
+````
+- This is used to assess the quality of clustering results using the Silhouette Coefficient across different numbers of clusters.
+- The Silhouette Coefficient helps in identifying the optimal number of clusters by indicating how well-separated the clusters are.
 
+````
+plt.plot(k_range, scores, marker = "o")
+plt.xlabel('Number of clusters')
+plt.ylabel('Silhouette Coefficient')
+plt.grid(True)
+````
+![image](https://github.com/Ras-codes/Customer-Credit-Card-Usage-Segmentation-Analysis/assets/164164852/4142f597-f9d0-4448-87a4-e6c8d303e530)
+- The plotted graph (Number of clusters vs Silhouette Coefficient) visually identifies the K value that maximizes clustering performance for the given data
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# Segment Distribution
+![image](https://github.com/Ras-codes/Customer-Credit-Card-Usage-Segmentation-Analysis/assets/164164852/0642373d-5e07-4cc8-9d70-f70e6334c0e2)
 
 
 
