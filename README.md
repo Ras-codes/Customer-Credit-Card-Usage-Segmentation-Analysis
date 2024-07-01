@@ -126,7 +126,6 @@ DA_copy_scaled.head()
 
 # PCA : Principle Component Analysis
 
-explain below operations line by line and give little summary
 
 ````
 pc = PCA(n_components = 17).fit(DA_copy_scaled)
