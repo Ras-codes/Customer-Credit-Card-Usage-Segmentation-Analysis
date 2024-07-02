@@ -187,6 +187,7 @@ DA_copy_scaled['cluster_9'] = km_9.labels_
 DA_copy_scaled['cluster_10'] = km_10.labels_
 ````
 - Saved cluster labels for all models (from 3 to 10 clusters) and appended them to the DA_copy_scaled DataFrame for further analysis.
+![image](https://github.com/Ras-codes/Customer-Credit-Card-Usage-Segmentation-Analysis/assets/164164852/c34a26f7-b2fc-4d0b-9464-27de0d3ba3a7)
 
 
 # ------------------------------------------------------------------------------
