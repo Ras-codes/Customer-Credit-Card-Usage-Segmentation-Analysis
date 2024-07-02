@@ -211,17 +211,12 @@ pd.Series(km_10.labels_).value_counts()/sum(pd.Series(km_10.labels_).value_count
 - Each line calculates the number of data points assigned to each cluster by km, where km is one of the KMeans models.
 - Dividing by the total count provides the percentage distribution of data points across clusters.
 
-````
-km_4.inertia_
-km_5.inertia_
-km_6.inertia_
-````
+![image](https://github.com/Ras-codes/Customer-Credit-Card-Usage-Segmentation-Analysis/assets/164164852/6218607f-2eef-4159-98a4-0fdfb1c9ee12)
 - Computes the sum of squared distances of samples to their closest cluster center.
 - Lower inertia values indicate tighter clusters, suggesting better-defined and more distinct clusters in the data.
 
 
 ## 2. Elbow Analysis
-
 
 ````
 for num_clusters in cluster_range:
@@ -241,6 +236,12 @@ plt.plot( clusters_df.num_clusters, clusters_df.cluster_errors, marker = "o" )
 plt.show()
 ````
 ![image](https://github.com/Ras-codes/Customer-Credit-Card-Usage-Segmentation-Analysis/assets/164164852/7108d2f1-6c17-47cd-9665-4a08e7882382)
+
+````
+DA_copy_scaled.cluster_5.value_counts()/sum(DA_copy_scaled.cluster_5.value_counts())
+````
+![image](https://github.com/Ras-codes/Customer-Credit-Card-Usage-Segmentation-Analysis/assets/164164852/73e5e481-7d08-4288-be28-2523943de1d3)
+
 
 ## 3. Choosing number clusters using Silhouette Coefficient -- SC
 
